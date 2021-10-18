@@ -1,9 +1,9 @@
-16:15:34 **** Incremental Build of configuration Debug for project pgm_comtage ****
-make -j12 all 
+16:21:43 **** Incremental Build of configuration Debug for project pgm_comtage ****
+make -j8 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m0plus -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L073xx -c -I../Core/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc -I../Drivers/STM32L0xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L0xx/Include -I../Drivers/CMSIS/Include -I"../Core/xbee/include" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
 ../Core/Src/main.c: In function 'main':
-../Core/Src/main.c:400:35: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-  400 |        HAL_UART_Transmit(&huart5, "+++", 3, 100);
+../Core/Src/main.c:403:35: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  403 |        HAL_UART_Transmit(&huart5, "+++", 3, 100);
       |                                   ^~~~~
       |                                   |
       |                                   char *
@@ -14,8 +14,8 @@ In file included from ../Core/Inc/stm32l0xx_hal_conf.h:280,
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h:1488:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
  1488 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~^~~~~
-../Core/Src/main.c:424:36: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-  424 |         HAL_UART_Transmit(&huart5, "ATRE\r", 5, 100);
+../Core/Src/main.c:432:36: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  432 |         HAL_UART_Transmit(&huart5, "ATSL\r", 5, 100);
       |                                    ^~~~~~~~
       |                                    |
       |                                    char *
@@ -26,28 +26,40 @@ In file included from ../Core/Inc/stm32l0xx_hal_conf.h:280,
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h:1488:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
  1488 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~^~~~~
-../Core/Src/main.c:451:9: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
-  451 |         sprintf(string, "ATWR\r");
+../Core/Src/main.c:435:36: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  435 |         HAL_UART_Transmit(&huart5, "ATRE\r", 5, 100);
+      |                                    ^~~~~~~~
+      |                                    |
+      |                                    char *
+In file included from ../Core/Inc/stm32l0xx_hal_conf.h:280,
+                 from ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Src/main.c:21:
+../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h:1488:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
+ 1488 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+      |                                                                ~~~~~~~~~^~~~~
+../Core/Src/main.c:466:9: warning: implicit declaration of function 'sprintf' [-Wimplicit-function-declaration]
+  466 |         sprintf(string, "ATWR\r");
       |         ^~~~~~~
-../Core/Src/main.c:451:9: warning: incompatible implicit declaration of built-in function 'sprintf'
+../Core/Src/main.c:466:9: warning: incompatible implicit declaration of built-in function 'sprintf'
 ../Core/Src/main.c:22:1: note: include '<stdio.h>' or provide a declaration of 'sprintf'
    21 | #include "main.h"
   +++ |+#include <stdio.h>
    22 | 
-../Core/Src/main.c:453:13: warning: incompatible implicit declaration of built-in function 'sprintf'
-  453 |        else sprintf(string, "AT%s%s\r", config[config_step][0], config[config_step][1]);
+../Core/Src/main.c:468:13: warning: incompatible implicit declaration of built-in function 'sprintf'
+  468 |        else sprintf(string, "AT%s%s\r", config[config_step][0], config[config_step][1]);
       |             ^~~~~~~
-../Core/Src/main.c:453:13: note: include '<stdio.h>' or provide a declaration of 'sprintf'
-../Core/Src/main.c:456:43: warning: implicit declaration of function 'strlen' [-Wimplicit-function-declaration]
-  456 |        HAL_UART_Transmit(&huart5, string, strlen(string), 100);
+../Core/Src/main.c:468:13: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:471:43: warning: implicit declaration of function 'strlen' [-Wimplicit-function-declaration]
+  471 |        HAL_UART_Transmit(&huart5, string, strlen(string), 100);
       |                                           ^~~~~~
-../Core/Src/main.c:456:43: warning: incompatible implicit declaration of built-in function 'strlen'
+../Core/Src/main.c:471:43: warning: incompatible implicit declaration of built-in function 'strlen'
 ../Core/Src/main.c:22:1: note: include '<string.h>' or provide a declaration of 'strlen'
    21 | #include "main.h"
   +++ |+#include <string.h>
    22 | 
-../Core/Src/main.c:456:35: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-  456 |        HAL_UART_Transmit(&huart5, string, strlen(string), 100);
+../Core/Src/main.c:471:35: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  471 |        HAL_UART_Transmit(&huart5, string, strlen(string), 100);
       |                                   ^~~~~~
       |                                   |
       |                                   char *
@@ -58,30 +70,40 @@ In file included from ../Core/Inc/stm32l0xx_hal_conf.h:280,
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h:1488:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
  1488 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~^~~~~
+../Core/Src/main.c:484:11: warning: incompatible implicit declaration of built-in function 'sprintf'
+  484 |           sprintf(string, "O %s\r", config[1][1]);
+      |           ^~~~~~~
+../Core/Src/main.c:484:11: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:484:19: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+  484 |           sprintf(string, "O %s\r", config[1][1]);
+      |                   ^~~~~~
+      |                   |
+      |                   uint8_t * {aka unsigned char *}
+../Core/Src/main.c:484:19: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
 ../Core/Src/main.c: In function 'xbee_send_string':
-../Core/Src/main.c:949:27: warning: incompatible implicit declaration of built-in function 'strlen'
-  949 |  tx_frame.length = 0x0E + strlen(string);
+../Core/Src/main.c:963:27: warning: incompatible implicit declaration of built-in function 'strlen'
+  963 |  tx_frame.length = 0x0E + strlen(string);
       |                           ^~~~~~
-../Core/Src/main.c:949:27: note: include '<string.h>' or provide a declaration of 'strlen'
-../Core/Src/main.c:949:34: warning: pointer targets in passing argument 1 of 'strlen' differ in signedness [-Wpointer-sign]
-  949 |  tx_frame.length = 0x0E + strlen(string);
+../Core/Src/main.c:963:27: note: include '<string.h>' or provide a declaration of 'strlen'
+../Core/Src/main.c:963:34: warning: pointer targets in passing argument 1 of 'strlen' differ in signedness [-Wpointer-sign]
+  963 |  tx_frame.length = 0x0E + strlen(string);
       |                                  ^~~~~~
       |                                  |
       |                                  uint8_t * {aka unsigned char *}
-../Core/Src/main.c:949:34: note: expected 'const char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
-../Core/Src/main.c:957:2: warning: implicit declaration of function 'memcpy' [-Wimplicit-function-declaration]
-  957 |  memcpy(tx_frame.content, string, strlen(string));
+../Core/Src/main.c:963:34: note: expected 'const char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:971:2: warning: implicit declaration of function 'memcpy' [-Wimplicit-function-declaration]
+  971 |  memcpy(tx_frame.content, string, strlen(string));
       |  ^~~~~~
-../Core/Src/main.c:957:2: warning: incompatible implicit declaration of built-in function 'memcpy'
-../Core/Src/main.c:957:2: note: include '<string.h>' or provide a declaration of 'memcpy'
-../Core/Src/main.c:957:42: warning: pointer targets in passing argument 1 of 'strlen' differ in signedness [-Wpointer-sign]
-  957 |  memcpy(tx_frame.content, string, strlen(string));
+../Core/Src/main.c:971:2: warning: incompatible implicit declaration of built-in function 'memcpy'
+../Core/Src/main.c:971:2: note: include '<string.h>' or provide a declaration of 'memcpy'
+../Core/Src/main.c:971:42: warning: pointer targets in passing argument 1 of 'strlen' differ in signedness [-Wpointer-sign]
+  971 |  memcpy(tx_frame.content, string, strlen(string));
       |                                          ^~~~~~
       |                                          |
       |                                          uint8_t * {aka unsigned char *}
-../Core/Src/main.c:957:42: note: expected 'const char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
-../Core/Src/main.c:971:29: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
-  971 |  HAL_UART_Transmit(&huart5, "~", 1, 100);
+../Core/Src/main.c:971:42: note: expected 'const char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:985:29: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+  985 |  HAL_UART_Transmit(&huart5, "~", 1, 100);
       |                             ^~~
       |                             |
       |                             char *
@@ -92,8 +114,8 @@ In file included from ../Core/Inc/stm32l0xx_hal_conf.h:280,
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h:1488:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'char *'
  1488 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~^~~~~
-../Core/Src/main.c:975:29: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
-  975 |  HAL_UART_Transmit(&huart5, &tx_frame.address64, 8, 100);
+../Core/Src/main.c:989:29: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
+  989 |  HAL_UART_Transmit(&huart5, &tx_frame.address64, 8, 100);
       |                             ^~~~~~~~~~~~~~~~~~~
       |                             |
       |                             uint64_t * {aka long long unsigned int *}
@@ -104,8 +126,8 @@ In file included from ../Core/Inc/stm32l0xx_hal_conf.h:280,
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h:1488:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'uint64_t *' {aka 'long long unsigned int *'}
  1488 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~^~~~~
-../Core/Src/main.c:976:29: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
-  976 |  HAL_UART_Transmit(&huart5, &tx_frame.address16, 2, 100);
+../Core/Src/main.c:990:29: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
+  990 |  HAL_UART_Transmit(&huart5, &tx_frame.address16, 2, 100);
       |                             ^~~~~~~~~~~~~~~~~~~
       |                             |
       |                             uint16_t * {aka short unsigned int *}
@@ -116,14 +138,14 @@ In file included from ../Core/Inc/stm32l0xx_hal_conf.h:280,
 ../Drivers/STM32L0xx_HAL_Driver/Inc/stm32l0xx_hal_uart.h:1488:73: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'uint16_t *' {aka 'short unsigned int *'}
  1488 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~^~~~~
-../Core/Src/main.c:979:55: warning: pointer targets in passing argument 1 of 'strlen' differ in signedness [-Wpointer-sign]
-  979 |  HAL_UART_Transmit(&huart5, &tx_frame.content, strlen(string), 100);
+../Core/Src/main.c:993:55: warning: pointer targets in passing argument 1 of 'strlen' differ in signedness [-Wpointer-sign]
+  993 |  HAL_UART_Transmit(&huart5, &tx_frame.content, strlen(string), 100);
       |                                                       ^~~~~~
       |                                                       |
       |                                                       uint8_t * {aka unsigned char *}
-../Core/Src/main.c:979:55: note: expected 'const char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
-../Core/Src/main.c:979:29: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
-  979 |  HAL_UART_Transmit(&huart5, &tx_frame.content, strlen(string), 100);
+../Core/Src/main.c:993:55: note: expected 'const char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:993:29: warning: passing argument 2 of 'HAL_UART_Transmit' from incompatible pointer type [-Wincompatible-pointer-types]
+  993 |  HAL_UART_Transmit(&huart5, &tx_frame.content, strlen(string), 100);
       |                             ^~~~~~~~~~~~~~~~~
       |                             |
       |                             uint8_t (*)[256] {aka unsigned char (*)[256]}
@@ -135,36 +157,54 @@ In file included from ../Core/Inc/stm32l0xx_hal_conf.h:280,
  1488 | HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
       |                                                                ~~~~~~~~~^~~~~
 ../Core/Src/main.c: In function 'xbee_send_alert':
-../Core/Src/main.c:986:3: warning: incompatible implicit declaration of built-in function 'sprintf'
-  986 |   sprintf(string, "E %s %li %li\r", config[1][1], bee_count, bee_rate);
+../Core/Src/main.c:1000:3: warning: incompatible implicit declaration of built-in function 'sprintf'
+ 1000 |   sprintf(string, "E %s %li %li\r", config[1][1], bee_count, bee_rate);
       |   ^~~~~~~
-../Core/Src/main.c:986:3: note: include '<stdio.h>' or provide a declaration of 'sprintf'
-../Core/Src/main.c:986:11: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
-  986 |   sprintf(string, "E %s %li %li\r", config[1][1], bee_count, bee_rate);
+../Core/Src/main.c:1000:3: note: include '<stdio.h>' or provide a declaration of 'sprintf'
+../Core/Src/main.c:1000:11: warning: pointer targets in passing argument 1 of 'sprintf' differ in signedness [-Wpointer-sign]
+ 1000 |   sprintf(string, "E %s %li %li\r", config[1][1], bee_count, bee_rate);
       |           ^~~~~~
       |           |
       |           uint8_t * {aka unsigned char *}
-../Core/Src/main.c:986:11: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
-../Core/Src/main.c:986:31: warning: format '%li' expects argument of type 'long int', but argument 5 has type 'int' [-Wformat=]
-  986 |   sprintf(string, "E %s %li %li\r", config[1][1], bee_count, bee_rate);
+../Core/Src/main.c:1000:11: note: expected 'char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:1000:31: warning: format '%li' expects argument of type 'long int', but argument 5 has type 'int' [-Wformat=]
+ 1000 |   sprintf(string, "E %s %li %li\r", config[1][1], bee_count, bee_rate);
       |                             ~~^                              ~~~~~~~~
       |                               |                              |
       |                               long int                       int
       |                             %i
 ../Core/Src/main.c: In function 'read_xbee':
-../Core/Src/main.c:1111:6: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
- 1111 |      memset(&received_frame, 0, sizeof(received_frame));
+../Core/Src/main.c:1129:10: warning: implicit declaration of function 'sscanf' [-Wimplicit-function-declaration]
+ 1129 |          sscanf(received_frame.content, "S %s", id_check);
+      |          ^~~~~~
+../Core/Src/main.c:1129:10: warning: incompatible implicit declaration of built-in function 'sscanf'
+../Core/Src/main.c:1129:10: note: include '<stdio.h>' or provide a declaration of 'sscanf'
+../Core/Src/main.c:1129:31: warning: pointer targets in passing argument 1 of 'sscanf' differ in signedness [-Wpointer-sign]
+ 1129 |          sscanf(received_frame.content, "S %s", id_check);
+      |                 ~~~~~~~~~~~~~~^~~~~~~~
+      |                               |
+      |                               uint8_t * {aka unsigned char *}
+../Core/Src/main.c:1129:31: note: expected 'const char *' but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+../Core/Src/main.c:1130:13: warning: implicit declaration of function 'memcmp' [-Wimplicit-function-declaration]
+ 1130 |          if(memcmp(id_check, config[1][1], 8) == 0){
+      |             ^~~~~~
+../Core/Src/main.c:1130:44: warning: 'memcmp' argument 3 type is 'int' where 'unsigned int' is expected in a call to built-in function declared without prototype [-Wbuiltin-declaration-mismatch]
+ 1130 |          if(memcmp(id_check, config[1][1], 8) == 0){
+      |                                            ^
+<built-in>: note: built-in 'memcmp' declared here
+../Core/Src/main.c:1138:6: warning: implicit declaration of function 'memset' [-Wimplicit-function-declaration]
+ 1138 |      memset(&received_frame, 0, sizeof(received_frame));
       |      ^~~~~~
-../Core/Src/main.c:1111:6: warning: incompatible implicit declaration of built-in function 'memset'
-../Core/Src/main.c:1111:6: note: include '<string.h>' or provide a declaration of 'memset'
-arm-none-eabi-gcc -o "pgm_comtage.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Documents\Travail\SysBee\programmes\cubeWorkspace\pgm_comtage\STM32L073CZTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="pgm_comtage.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+../Core/Src/main.c:1138:6: warning: incompatible implicit declaration of built-in function 'memset'
+../Core/Src/main.c:1138:6: note: include '<string.h>' or provide a declaration of 'memset'
+arm-none-eabi-gcc -o "pgm_comtage.elf" @"objects.list"   -mcpu=cortex-m0plus -T"C:\Users\antoine.serry\Desktop\Nouveau dossier\SysBee\programmes\cubeWorkspace\pgm_comtage\STM32L073CZTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="pgm_comtage.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: pgm_comtage.elf
  
 arm-none-eabi-size   pgm_comtage.elf 
 arm-none-eabi-objdump -h -S  pgm_comtage.elf  > "pgm_comtage.list"
 arm-none-eabi-objcopy  -O binary  pgm_comtage.elf  "pgm_comtage.bin"
    text	   data	    bss	    dec	    hex	filename
-  24772	    756	   2680	  28208	   6e30	pgm_comtage.elf
+  28188	    756	   2680	  31624	   7b88	pgm_comtage.elf
 Finished building: default.size.stdout
  
 Finished building: pgm_comtage.bin
@@ -172,5 +212,5 @@ Finished building: pgm_comtage.bin
 Finished building: pgm_comtage.list
  
 
-16:15:34 Build Finished. 0 errors, 23 warnings. (took 870ms)
+16:21:44 Build Finished. 0 errors, 31 warnings. (took 1s.22ms)
 
