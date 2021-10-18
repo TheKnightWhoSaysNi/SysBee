@@ -42,6 +42,8 @@
 #define bee_rate_alert_threshold 5 //in bee per DT
 #define DT 10 //in seconds
 
+#define max_attempts 5 //tentatives de flashage du xbee avant mode défaut
+
 #define transmit_request 0x10
 #define receive_packet 0x90
 #define remote_command_response 0x97
@@ -232,10 +234,9 @@ uint8_t xbee_rx_read_index = 0;
 uint8_t xbee_rx_write_index = 0;
 
 uint8_t config[20][2][10] = {
-	{"ID", "1111"}, // network id
-	{"NI", "maison"}, // node id
+	{"ID", "1234567"}, // network id
+	{"NI", "\0" }, // node id
 	{"CE", "0"},	// coordinator mode
-	{"ID", "1111"}, // network id
 	{"AP", "1"},  	// API enable
 	{"SP", "20"},	// cyclic sleep period
 	{"SN", "100"},  // number of sleep periods
@@ -245,7 +246,7 @@ uint8_t config[20][2][10] = {
 uint8_t config_step = 0;
 uint8_t xbee_reset = 0;
 
-uint8_t config_length = 9;
+uint8_t config_length = 8;
 
 enum xbee_send_states {
 	enter_command_mode,
@@ -386,8 +387,10 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  static uint16_t timeout;
 	  char string[50] = {0};
+	  static uint8_t attempts = 0;
 
 	  switch(master_state){
+
 	  	  case lora_init:
 	  		  signal_state = signal_connecting;
 	  		  master_state = xbee_init;
@@ -400,6 +403,11 @@ int main(void)
 					  HAL_UART_Transmit(&huart5, "+++", 3, 100);
 					  timeout = 0;
 					  xbee_send_state = command_mode_ok;
+					  if(attempts >= max_attempts){
+						  signal_state = signal_fault;
+						  master_state = master_idle;
+					  }
+					  attempts++;
 				  break;
 
 				  case command_mode_ok:
@@ -420,7 +428,10 @@ int main(void)
 				  break;
 
 				  case single_command:
-					  if (xbee_reset==0){
+				  	  if (config[1][1][0] == '\0'){
+						  HAL_UART_Transmit(&huart5, "ATSL\r", 5, 100);
+				  	  }
+					  else if (xbee_reset==0){
 						  HAL_UART_Transmit(&huart5, "ATRE\r", 5, 100);
 						  xbee_reset = 1;
 					  }
@@ -430,7 +441,11 @@ int main(void)
 
 				  case single_command_ok:
 					  if(cr_flag){
-						  if(xbee_rx_buffer[cr_flag-2] == 'O' && xbee_rx_buffer[cr_flag-1] == 'K'){
+						  if(config[1][1][0] == '\0'){
+							  for(uint8_t i = 0; i<8; i++) config[1][1][i] = xbee_rx_buffer[cr_flag+i-8];
+							  xbee_send_state = single_command;
+						  }
+						  else if(xbee_rx_buffer[cr_flag-2] == 'O' && xbee_rx_buffer[cr_flag-1] == 'K'){
 							  xbee_send_state = send_config;
 							  HAL_Delay(10);
 							  timeout = 0;
@@ -465,6 +480,9 @@ int main(void)
 								  HAL_GPIO_WritePin(GPIOB, LED_V, GPIO_PIN_SET);
 								  xbee_send_state = config_over;
 								  HAL_Delay(10000);
+								  uint8_t string[20] = {0};
+								  sprintf(string, "O %s\r", config[1][1]);
+								  xbee_send_string(string);
 								  master_state = fine_polling;
 								  xbee_rx_read_index = xbee_rx_write_index;
 							  }
@@ -498,10 +516,6 @@ int main(void)
 	      break;
 
 	  	  case master_idle:
-	  		  signal_state = signal_ok;
-	  		  HAL_Delay(1000);
-
-	  		  master_state = fine_polling;
 	  	  break;
 
 	  	  case sparse_polling:
@@ -514,7 +528,7 @@ int main(void)
 	  	  break;
 
 	  	  case fine_polling:
-	  		  signal_state = signal_ok;
+	  		  if(signal_state != signal_swarming) signal_state = signal_ok;
 	  		  scan_sensors();
 	  		  if(bee_rate < -1*bee_rate_alert_threshold || bee_rate > bee_rate_alert_threshold){
 	  			  xbee_send_alert();
@@ -996,6 +1010,7 @@ void read_xbee(){
   if(xbee_rx_read_index<xbee_rx_write_index && master_state != xbee_init){
 	  uint64_t sum = 0;
 	  static uint8_t multiple_byte_step;
+	  uint8_t id_check[10] = {0};
 
 	  switch (xbee_receive_state){
 		  case idle:
@@ -1024,6 +1039,7 @@ void read_xbee(){
 			  switch(received_frame.type){
 				  case receive_packet: xbee_receive_state = frame_address64; break;
 				  case remote_command_response: xbee_receive_state = frame_id; break;
+				  case 0x8B:
 				  default: xbee_rx_read_index = xbee_rx_write_index;
 						   xbee_receive_state = idle;
 				  break;
@@ -1101,11 +1117,22 @@ void read_xbee(){
 		  break;
 
 		  case process_content:
-
 			  switch(received_frame.content[0]){
-			  	  case 'E':
+			  	  case 'E': //swarming prefix
 			  		  master_state = lora_alert;
 			  	  break;
+
+			  	  case 'O': //online prefix
+			  	  break;
+
+			  	  case 'S': //stop alert prefix
+			  		  sscanf(received_frame.content, "S %s", id_check);
+			  		  if(memcmp(id_check, config[1][1], 8) == 0){
+			  			  signal_state = signal_ok;
+			  		  	  master_state = sparse_polling;
+			  		  }
+
+			      break;
 			  }
 	  		  xbee_receive_state = idle;
 			  memset(&received_frame, 0, sizeof(received_frame));
